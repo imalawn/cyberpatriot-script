@@ -105,15 +105,20 @@ fi
 
 echo "A few editor windows will open. Add or modify the following values:"
 echo "/etc/login.defs: PASS_MAX_DAYS 90, PASS_MIN_DAYS 0, PASS_WARN_AGE 7"
-echo "/etc/pam.d/common-password, line containing pam_unix.so: remember=5 minlen=8"
-gedit /etc/login.defs
-gedit /etc/pam.d/common-password
 read -p "Press ENTER to continue...."
+nano /etc/login.defs
+
 echo ""
-echo "An editor window will open. Add or modify the following line:"
-echo "net.ipv4.tcp_syncookies = 1"
-gedit /etc/sysctl.conf
+echo "Next file:"
+echo "/etc/pam.d/common-password, line containing pam_unix.so: remember=5 minlen=8"
 read -p "Press ENTER to continue...."
+nano /etc/pam.d/common-password
+
+echo ""
+echo "Next file:"
+echo "/etc/sysctl.conf: net.ipv4.tcp_syncookies = 1"
+read -p "Press ENTER to continue...."
+nano /etc/sysctl.conf
 sudo sysctl -p
 
 echo "TO-DO:"
