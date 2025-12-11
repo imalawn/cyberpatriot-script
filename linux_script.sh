@@ -46,6 +46,7 @@ while [ "$completed" -eq 0 ]; do
     if [[ "$confirm" == [yY] ]]; then
         unset skipped
         apt purge -y "${to_delete[@]}"
+        apt autoremove
         completed=1
     else
         echo "Try again:"
@@ -58,12 +59,12 @@ echo "------------"
 echo "Manage users"
 echo "------------"
 read -p "Enter secure password to be used: " default_pw
-getent passwd | while IFS=: read -r name password uid gid gecos home shell; do
+for name in $(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd); do
     read -p "Manage $name? [y/n] " confirm; if [[ "$confirm" == [yY] ]]; then
         read -p "Is $name an authorized user? [y/n] " confirm; if [[ "$confirm" == [yY] ]]; then
             read -p "Is $name an administrator? [y/n] " confirm
             if [[ "$confirm" == [yY] ]]; then
-                usermod -a -G sudo "$name"
+                usermod -aG sudo "$name"
                 passwd "$name"
             else
                 gpasswd -d "$name" sudo
